@@ -34,3 +34,23 @@ tutch-sml :
 
 tutch-mlton :
 	$(mlton) -output $(tutch) -default-ann 'allowSigWithtype true' src/tutch.mlb
+
+# Quiet run for test suite
+tutch-q = $(tutch) -Q
+
+test : test-succeed test-fail
+
+test-succeed :
+	$(tutch-q) -r ./doc/examples/prop.req ./doc/examples/prop0.tut ./doc/examples/prop3.tut
+	$(tutch-q) -r ./doc/examples/prop.req ./doc/examples/prop1.tut ./doc/examples/prop3.tut
+	$(tutch-q) \
+	  ./doc/examples/prop4.tut \
+	  ./doc/examples/prop0-ann.tut \
+	  ./doc/examples/prop3-ann.tut \
+	  ./doc/examples/fol.tut \
+	  ./doc/examples/arith.tut \
+	  ./doc/examples/arith-terms.tut
+
+test-fail :
+	! $(tutch-q) ./doc/examples/prop2.tut
+	! $(tutch-q) ./doc/examples/struct-ind.tut
