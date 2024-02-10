@@ -29,7 +29,8 @@ sig
   val exitSpecIncomplete : result
   val exitSubmission     : result
 
-  val exitMin :  result *  result ->  result
+  val exitMin  : result * result -> result
+  val isExitOK : result -> bool
 
 end (* signature GLOBAL *)
 
@@ -59,6 +60,10 @@ struct
     "administrators now (" ^ administrators ^").\n" ^
     "Please supply the error message above, your Andrew ID and the command line.\n"
 
+(* Andreas, 2024-02-10, the new standard library makes OS.Process.status abstract,
+   so we cannot easily construct specific exit codes.
+   One could try to use Posix.Process, but let's not go there...
+
   val exitOK = 0                   (* OK                                *)
   val exitInternalError = 1        (* uncaught exception, bug in Tutch  *)
   val exitSysError = 2             (* file not found, access denied etc *)
@@ -75,5 +80,27 @@ struct
   fun exitMin (0, status) = status
     | exitMin (status, 0) = status
     | exitMin (status, status') = Int.min (status, status')
+*)
+
+  val fail = OS.Process.failure
+
+  val exitOK = OS.Process.success  (* OK                                *)
+  val exitInternalError = fail     (* uncaught exception, bug in Tutch  *)
+  val exitSysError = fail          (* file not found, access denied etc *)
+  val exitCmdLine = fail           (* invalid command line syntax       *)
+  val exitParsing = fail           (* lexing or parsing error           *)
+  val exitProofInvalid = fail      (* proof malformed, like [A;[B;B]]   *)
+  val exitUnjustified = fail       (* proof contains unjustified lines  *)
+  val exitWrongGoal = fail         (* goal does not match proof         *)
+  val exitSpec = fail              (* requirements file not found       *)
+  val exitSpecIncomplete = fail    (* not all req. solved               *)
+  val exitSubmission = fail        (* submission failed                 *)
+  val exitTermCheck = fail         (* term does not check               *)
+
+  (* Return success if both statuses are success. *)
+  fun exitMin (status1, status2) =
+    if OS.Process.isSuccess status1 then status2 else status1
+
+  val isExitOK = OS.Process.isSuccess
 
 end (* structure GLOBAL *)

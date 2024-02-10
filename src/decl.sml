@@ -49,7 +49,7 @@ struct
           val _ = if Chatter.finalResults() then print ("Proving " ^ x ^ ": "^ Exp.propPretty (A)
             ^ " ..." ^(if class then " (classically)" else "")^ "\n") else ();
           val result = CheckProof.check (class, !globG, p, a)
-          val _ = if result = Global.exitOK
+          val _ = if Global.isExitOK result
                   then (globG := Cxt.Ext (x, A, !globG);
                         SpecCheck.tally (Spec.Proof (x, A)))
                   else false
@@ -62,7 +62,7 @@ struct
           val _ = if Chatter.finalResults() then print ("Proving " ^ x ^ ": "^ Prop.prettyString (A)
             ^ " annotated...\n") else ();
           val result = CheckAnnProof.check (p, a)
-          val _ = if result = Global.exitOK then SpecCheck.tally (Spec.AnnProof (x, A))
+          val _ = if Global.isExitOK result then SpecCheck.tally (Spec.AnnProof (x, A))
                   else false
       in result
       end
@@ -73,7 +73,7 @@ struct
           val _ = if Chatter.finalResults() then print ("Checking value " ^ x ^ ": "^ Exp.typePretty (S)
             ^ "\n") else ();
           val result = CheckExp.checkExp (!globG, m, s)
-          val _ = if result = Global.exitOK then
+          val _ = if Global.isExitOK result then
                    (globG := Cxt.Ext (x, S, !globG);
                     uvalG := Cxt.Ext (x, (Val.eval (S, Cxt.Empty), Univ.Type),
                                           !uvalG);
@@ -100,7 +100,7 @@ struct
           val _ = if Chatter.finalResults() then print ("Checking term " ^ x ^ ": "^ Exp.propPretty (S)
             ^ "\n") else ();
           val result = CheckDep.checkExp (!uvalG, m, s)
-          val _ = if result = Global.exitOK then
+          val _ = if Global.isExitOK result then
                    (globG := Cxt.Ext (x, S, !globG);
                     uvalG := Cxt.Ext (x, (Val.eval (S, Cxt.Empty), Univ.Prop),
                                           !uvalG);
