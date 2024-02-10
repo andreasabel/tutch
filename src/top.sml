@@ -11,7 +11,7 @@ end; (* signature TOP *)
 structure Top :> TOP =
 struct
 
-  val version = "0.52 beta, $Date: 2002/10/24 19:25:49 $"
+  val version = "0.54, 2024-02-10"
   val tutchVersion = "TUTCH "^version
   val submitVersion = "SUBMIT "^version
   val tutExt = "tut"
