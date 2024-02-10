@@ -54,3 +54,5 @@ test-succeed :
 test-fail :
 	! $(tutch-q) ./doc/examples/prop2.tut
 	! $(tutch-q) ./doc/examples/struct-ind.tut
+clean : 
+	rm -rf .cm src/.cm bin/.heap bin/tutch

@@ -233,7 +233,7 @@ struct
            (
             if Chatter.declDetails() then printFirst (nest, x, A) else ();
             case check' (nest+1, Ext (NonHyp (Term.Var (x), A), Js),
-                         Cxt.Ext (x, A, G), P, Paths.right (path)) of
+                         Cxt.ext (x, A, G), P, Paths.right (path)) of
                 NonHyp (M, B) => Hypothetical (AnnProof.Hyp (x, A), M, B)
               | Hypothetical _ => error (msg (path, "Hypothetical judgment at the end of a proof")))
 

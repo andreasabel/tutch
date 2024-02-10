@@ -449,9 +449,10 @@ struct
     | extEnv (Proof.Ext (Proof.Var (x, T), Hs), e) = extEnv (Hs, Val.gen (x, e))
     | extEnv (Proof.Ext (Proof.Ass (A), Hs), e) = extEnv (Hs, e)
 
-  fun extCxt (Proof.Last (Proof.Var (x, T)), G) = Cxt.Ext (x, T, G)
+  (* extend context, avoiding shadowing *)
+  fun extCxt (Proof.Last (Proof.Var (x, T)), G) = Cxt.ext (x, T, G)
     | extCxt (Proof.Last (Proof.Ass (A)), G) = G
-    | extCxt (Proof.Ext (Proof.Var (x, T), Hs), G) = extCxt (Hs, Cxt.Ext (x, T, G))
+    | extCxt (Proof.Ext (Proof.Var (x, T), Hs), G) = extCxt (Hs, Cxt.ext (x, T, G))
     | extCxt (Proof.Ext (Proof.Ass (A), Hs), G) = extCxt (Hs, G)
 
   (*  PRINTING *)

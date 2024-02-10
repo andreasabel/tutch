@@ -6,6 +6,7 @@ $/smlnj-lib.cm
 
 stream.sml
 istream.sml
+global.sml
 cxt.sml
 names.sml
 exp.sml
@@ -26,7 +27,6 @@ paths.sml
 proofs.sml
 extsyn.sml
 chatter.sml
-global.sml
 check-term.sml
 check-exp.sml
 check-dep.sml
