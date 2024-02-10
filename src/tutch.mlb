@@ -1,8 +1,11 @@
-(* Package definition to be used with SML/NJ compilation manager. *)
+(* Package definition for use with MLton.
 
-Group is
-$/basis.cm
-$/smlnj-lib.cm
+   Order of modules matters for MLTon,
+   later modules can only depend on earlier modules in the list.
+*)
+
+$(SML_LIB)/basis/basis.mlb
+$(SML_LIB)/smlnj-lib/Util/smlnj-lib.mlb
 
 stream.sml
 istream.sml
@@ -47,3 +50,4 @@ oslib.sml
 submit.sml
 reqfile.sml
 top.sml
+main.sml

@@ -5,21 +5,32 @@
 # Please edit the following lines
 # ---------------------------------------------------------------
 
-# What is SML/NJ called?
+# SML interpreter and/or compiler
 sml = sml
+mlton = mlton
+
+# Target
+tutch = bin/tutch
 
 # ---------------------------------------------------------------
 # Do not edit the following lines
 # ---------------------------------------------------------------
 
-default : tutch
+default : tutch-mlton
 
-all : tutch
+all : tutch-sml tutch-mlton
 
-tutch :
+# Build heap image runnable with sml
+
+tutch-sml :
 	@echo "Compiling tutch..."
 	$(sml) < tutch.sml ;
 	sed -e "s#%TUTCHDIR#"`pwd`"#g" \
 	    -e "s#%SML#$(sml)#g" bin/.tutch \
-	> bin/tutch ;
-	chmod a+x bin/tutch ;
+	> $(tutch) ;
+	chmod a+x $(tutch) ;
+
+# Build binary with MLton
+
+tutch-mlton :
+	$(mlton) -output $(tutch) -default-ann 'allowSigWithtype true' src/tutch.mlb

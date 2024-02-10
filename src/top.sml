@@ -243,7 +243,7 @@ struct
 
   (*  top : string * string list -> OS.Process.status
   *)
-  fun top (name, args) =
+  fun top (self_, args) =
     let val action = parseArgs (args)
     in
       case parseArgs (args) of
