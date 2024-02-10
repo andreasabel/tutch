@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:         { branches: [ master ] }
+  pull_request: { branches: [ master ] }
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+
+    - name: Install SML/NJ and MLton (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install smlnj mlton
+        echo "/usr/local/smlnj/bin" >> "${GITHUB_PATH}"
+
+    - name: Install SML (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get install smlnj
+          # ubuntu-22.04 does not have mlton
+          # ubuntu-20.04's mlton is too old (2013)
+
+    - uses: actions/checkout@v4
+
+    - name: Build with SML/NJ
+      run: |
+        make tutch-sml
+
+    - name: Test with SML/NJ
+      run: |
+        ls -al bin/tutch
+        ls -al bin/.heap
+        make test
+
+    - name: Build with MLton
+      if: runner.os == 'macOS'
+      run: |
+        make tutch-mlton
+
+    - name: Test with MLton
+      if: runner.os == 'macOS'
+      run: |
+        ls -al bin/tutch
+        make test
